@@ -7,9 +7,20 @@ public class User {
     public interface UserSimpleView {};
     public interface UserDetailView extends UserSimpleView {};
 
+    private String id;
+
     private String username;
 
     private String password;
+
+    @JsonView(UserSimpleView.class)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @JsonView(UserSimpleView.class)
     public String getUsername() {

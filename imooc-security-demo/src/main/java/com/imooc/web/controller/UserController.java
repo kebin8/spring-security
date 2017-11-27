@@ -27,6 +27,17 @@ public class UserController {
         return users;
     }
 
+    @PostMapping
+    public User create(@RequestBody User user) {
+
+        System.out.println(user.getId());
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+
+        user.setId("1");
+        return user;
+    }
+
     @GetMapping("/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable String id) {
