@@ -6,8 +6,9 @@ import com.imooc.dto.UserQueryCondition;
 import com.imooc.exception.UserNotExistsException;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,11 +19,13 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     @GetMapping
     @JsonView(User.UserSimpleView.class)
     public List<User> query(UserQueryCondition queryCondition) {
 
-        System.out.println(ReflectionToStringBuilder.toString(queryCondition, ToStringStyle.MULTI_LINE_STYLE));
+        logger.debug(ReflectionToStringBuilder.toString(queryCondition, ToStringStyle.MULTI_LINE_STYLE));
 
         List<User> users = new ArrayList<>();
         users.add(new User());
@@ -35,13 +38,12 @@ public class UserController {
     public User create(@Valid @RequestBody User user, BindingResult errors) {
 
         if (errors.hasErrors()) {
-            errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
+            errors.getAllErrors().stream().forEach(error -> logger.debug(error.getDefaultMessage()));
         }
 
-
-        System.out.println(user.getId());
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
+        logger.debug(user.getId());
+        logger.debug(user.getUsername());
+        logger.debug(user.getPassword());
 
         user.setId("1");
         return user;
@@ -51,14 +53,13 @@ public class UserController {
     public User update(@Valid @RequestBody User user, BindingResult errors) {
 
         if (errors.hasErrors()) {
-            errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
+            errors.getAllErrors().stream().forEach(error -> logger.debug(error.getDefaultMessage()));
         }
 
-
-        System.out.println(user.getId());
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
-        System.out.println(user.getDob());
+        logger.debug(user.getId());
+        logger.debug(user.getUsername());
+        logger.debug(user.getPassword());
+        logger.debug(user.getDob().toString());
 
         user.setId("1");
         return user;
@@ -69,6 +70,8 @@ public class UserController {
     public User getInfo(@PathVariable String id) {
         throw new UserNotExistsException(id);
 
+//        logger.debug("进入getInfo服务");
+
 //        User user = new User();
 //        user.setUsername("tom");
 //        return user;
@@ -76,6 +79,6 @@ public class UserController {
 
     @DeleteMapping("/{id:\\d+}")
     public void deleteInfo(@PathVariable String id) {
-        System.out.println(id);
+        logger.debug(id);
     }
 }
